@@ -5,7 +5,30 @@ import { useState, createContext, useEffect } from "react";
 
 export const ShoppCartContext = createContext();
 
+export const initializeLocalStorage = () => {
+    const accountInLocalStorage = localStorage.getItem("account");
+    const signOutInLocalStorage = localStorage.getItem("sign-out");
+    let parsedAccount;
+    let parsedSignOut;
+    if (!accountInLocalStorage) {
+        localStorage.setItem("account", JSON.stringify({}));
+        parsedAccount = {};
+        } else {
+        parsedAccount = JSON.parse(accountInLocalStorage);
+        };
+        if (!signOutInLocalStorage){
+        localStorage.setItem("sign-out", JSON.stringify(false));
+        parsedSignOut = false;
+        } else {
+        parsedSignOut = JSON.parse(signOutInLocalStorage);
+        };
+    }
+
 export const ShoppiCartProvider = ({children}) => {
+    // My Account
+    const [account, setAccount] =  useState({});
+    // Sign Out
+    const [signOut, setSignOut] = useState(false);
     // ShopiCart - Counter
     const [count, setCount] = useState( 0 );
     // Product detail
@@ -97,7 +120,11 @@ export const ShoppiCartProvider = ({children}) => {
             filteredItems,
             setFilteredItems,
             searchByCategory,
-            setSearchByCategory
+            setSearchByCategory,
+            account,
+            setAccount,
+            signOut,
+            setSignOut,
         }}>
             {children}
         </ShoppCartContext.Provider>
